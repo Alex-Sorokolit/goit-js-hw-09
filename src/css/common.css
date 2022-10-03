@@ -16,3 +16,25 @@ img {
   display: block;
   max-width: 100%;
 }
+
+button {
+  min-height: 50px;
+  min-width: 100px;
+  text-transform: uppercase;
+  background-color: #fff;
+}
+button:hover:not([disabled]) {
+  transform: scale(1.1);
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.3), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.background-btn__start {
+  margin-right: 20px;
+}
+.button-wrapper {
+  display: flex;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+}
