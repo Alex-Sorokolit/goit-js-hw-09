@@ -1,135 +1,127 @@
+import flatpickr from "flatpickr";
+// const flatpickr = require("flatpickr");
+import "flatpickr/dist/flatpickr.min.css";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 const refs = {
- startBtn: document.querySelector('button[data-action-start]'),
- stopBtn: document.querySelector('button[data-action-stop]'),
- clockFace: document.querySelector('.js-clockface'),
-}
+  startBtn: document.querySelector('button'),
+  clockFace: document.querySelector('.timer')
+} 
 
-// Реалізація через клас
-class Timer {
- constructor() { 
-  this.intervalId = null;
-  this.isActive = false; 
- }
- // метод запуску таймера
- start() {
-  // Якщо інтервал активний то ми виходимо із функції (другу копію не запускаємо)
-  if (this.isActive) {
-   console.log('Інтервал вже був запущений');
-   return;
-  }
+let selectedDate = null;
+let isActive = false;
 
-  const startTime = Date.now();
-  // якщо інтервал неактивний, ми його активуємо
-  this.isActive = true;
-  console.log('Інтервал запущений');
+// Об'єкт налаштувань для flatpickr
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: Date.now(),
+  minuteIncrement: 1,
 
-  // значення intervalId записуємо у параметр об'єкта
-  this.intervalId = setInterval(() => {
-   // оприділяємо поточний час на момент виконання інтервалу(кожну секунду буде інший)
-   const currentTime = Date.now();
-   // рахуємо різницю між стартовим часом і поточним (в даному інтервалі)
-   const deltaTime = currentTime - startTime;
-   // деструктуризуємо deltaTime і виводимо у консоль
-   const time = getTimerComponents(deltaTime);
-   console.log(time);
-   // повертаємо значення на сторінку
-     // updateClockFace(time);
-  }, 1000);
- };
+  // Функція яка виконається при закритті вікна flatpickr
+  onClose(selectedDates) {
+    // Перевіряємо чи вибрана дата в минулому
+    if (selectedDates[0] < Date.now()) {
+      console.log('Виберіть дату в майбутньому');
+      // Підключаємо плагін notiflix із сповіщеннями,
+      // другим параметром передаємо об'єкт налаштувань
+      Notify.failure('Виберіть дату в майбутньому', {
+        position: "center-top",
+        // backOverlay: false,
+        clickToClose: true,
+        closeButton: true,
+        useIcon: false,
+        backOverlayClickToClose: true,
+        timeout: 1000,
+        fontSize: 20,
+      });
+      refs.startBtn.disabled = true;
+      return
+    }
 
- // метод зупинки таймера 
- stop() {
-  clearInterval(this.intervalId)
-  this.isActive = false;
-  console.log(this.intervalId);
-  console.log('Інтервал зупинений');
- }
-
-
-
-}
-
-
-// Реалізація через об'єкт
-const timer = {
- // значення intervalId
- intervalId: null,
- // чи активний інтервал?
- isActive: false,
-
- // метод запуску таймера
- start() {
-  // Якщо інтервал активний то ми виходимо із функції (другу копію не запускаємо)
-  if (this.isActive) {
-   console.log('Інтервал вже був запущений');
-   return;
-  }
-
-  const startTime = Date.now();
-  // якщо інтервал неактивний, ми його активуємо
-  this.isActive = true;
-  console.log('Інтервал запущений');
-
-  // значення intervalId записуємо у параметр об'єкта
-  this.intervalId = setInterval(() => {
-   // оприділяємо поточний час на момент виконання інтервалу(кожну секунду буде інший)
-   const currentTime = Date.now();
-   // рахуємо різницю між стартовим часом і поточним (в даному інтервалі)
-   const deltaTime = currentTime - startTime;
-   // деструктуризуємо deltaTime і виводимо у консоль
-   const time = getTimerComponents(deltaTime);
-   console.log(time);
-   // повертаємо значення на сторінку
-     updateClockFace(time);
-  }, 1000);
- },
-
-
- // метод зупинки таймера 
- stop() {
-  clearInterval(this.intervalId)
-  this.isActive = false;
-  console.log(this.intervalId);
-  console.log('Інтервал зупинений');
- }
+    // Виконуємо якщо дата вибрана в майбутньому
+    refs.startBtn.disabled = false;
+    selectedDate = selectedDates[0];
+    return selectedDate
+  },
 };
 
-// присвоюємо подію на клік по кнопці start
-refs.startBtn.addEventListener('click', () => {
- timer.start();
-})
 
-// присвоюємо подію на клік по кнопці stop
-refs.stopBtn.addEventListener('click', () => {
- timer.stop();
-} )
+// Ініціалізуємо плагін flatpickr на інпуті
+flatpickr('#datetime-picker',options)
 
-// Функція повернення значень таймера на сторінку
-function updateClockFace({ hours, minutes, seconds }) {
- refs.clockFace.textContent = `${hours}:${minutes}:${seconds}`;
-}
+// Функція запуску таймера
+function startTimer() {
+// перевіряємо чи був запущений таймер
+  if (isActive) {
+    console.log('Інтервал вже був запущений');
+    return;
+  };
 
+// Якщо не запущений то запускаємо
+  isActive = true;
+  refs.startBtn.disabled = true;
+  setInterval(() => {
 
+// оприділяємо поточний час на момент виконання інтервалу(кожну секунду буде інший)
+    const currentTime = Date.now();
+    // console.log(currentTime);
 
+// рахуємо різницю між стартовим часом і поточним (в даному інтервалі)
+    const deltaTime = selectedDate - currentTime;
+    // console.log(selectedDate);
+    // console.log(deltaTime);
 
-
-
-
-
+// Конвертуємо мілісекунди в дні години хвилини секунди
+    const time = convertMs(deltaTime);
+    console.log(time);
+      
+// повертаємо значення на сторінку
+    updateClockFace(time);
+        
+  }, 1000)
+};
 
 
 function pad(value) {
 return String(value).padStart(2,'0') 
 }
 
-// function getPadComponents(time) {
- 
-// }
+// Функція конвертації мілісекунд в дні години хвилини секунди
+function convertMs(ms) {
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-function getTimerComponents(time) {
- const hours = pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
- const minutes = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
- const seconds = pad(Math.floor((time % (1000 * 60)) / 1000));
- return {hours, minutes, seconds}
+  return { days, hours, minutes, seconds };
 }
+
+
+// Функція повернення значень таймера на сторінку
+function updateClockFace( { days, hours, minutes, seconds }) {
+  const clockDays = refs.clockFace.querySelector('[data-days]')
+  clockDays.textContent =pad(days);
+
+  const clockHours = refs.clockFace.querySelector('[data-hours]')
+  clockHours.textContent =pad(hours);
+  
+  const clockMinutes = refs.clockFace.querySelector('[data-minutes]')
+  clockMinutes.textContent =pad(minutes);
+  
+  const clockSeconds = refs.clockFace.querySelector('[data-seconds]')
+  clockSeconds.textContent =pad(seconds);
+  
+}
+
+// Слухач подій на кнопці Start, запускає таймер
+refs.startBtn.addEventListener('click', startTimer)

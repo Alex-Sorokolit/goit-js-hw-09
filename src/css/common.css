@@ -7,7 +7,7 @@ body {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fafafa;
+  background-color: #6c9bb9;
   color: #212121;
   line-height: 1.5;
 }
@@ -22,6 +22,7 @@ button {
   min-width: 100px;
   text-transform: uppercase;
   background-color: #fff;
+  font-size: 20px;
 }
 button:hover:not([disabled]) {
   transform: scale(1.1);
@@ -37,4 +38,47 @@ button:hover:not([disabled]) {
   height: 90vh;
   justify-content: center;
   align-items: center;
+}
+
+.date-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  /* outline: 1px black solid; */
+  margin-bottom: 50px;
+}
+.date-input-wrapper input {
+  border: 2px solid black;
+  margin-bottom: 30px;
+  font-size: 25px;
+  text-align: center;
+}
+
+.timer {
+  margin-top: 300px;
+  display: flex;
+  font-size: 25px;
+  max-width: max-content;
+  margin: 0 auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border: solid 3px rgb(234, 233, 241);
+  border-radius: 50% 50%;
+}
+.field:not(:last-child) {
+  margin-right: 10px;
+}
+
+.value {
+  font-size: 50px;
+}
+.label {
+  color: #ffffff;
 }

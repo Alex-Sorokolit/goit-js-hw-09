@@ -9,8 +9,10 @@
   <body>
     <p><a href="index.html">Go back</a></p>
 
-    <input type="text" id="datetime-picker" />
-    <button type="button" data-start>Start</button>
+    <div class="date-input-wrapper">
+      <input type="text" id="datetime-picker" />
+      <button type="button" disabled data-start>Start</button>
+    </div>
 
     <div class="timer">
       <div class="field">
@@ -30,16 +32,6 @@
         <span class="label">Seconds</span>
       </div>
     </div>
-
-    <!-- MY CODE -->
-    <div class="mytimer">
-      <p class="clockface js-clockface"></p>
-    </div>
-    <div class="actions">
-      <button class="timer-btn" data-action-start>Запустити</button>
-      <button class="timer-btn" data-action-stop>Зупинити</button>
-    </div>
-    <!-- end my code -->
 
     <script src="js/02-timer.js" type="module"></script>
   </body>
