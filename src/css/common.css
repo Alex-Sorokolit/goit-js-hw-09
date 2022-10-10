@@ -82,3 +82,13 @@ button:hover:not([disabled]) {
 .label {
   color: #ffffff;
 }
+
+.form {
+  background-color: rgb(129, 182, 182);
+}
+
+.form > button {
+  margin-left: 20px;
+  background-color: rgb(129, 182, 182);
+  border: none;
+}
