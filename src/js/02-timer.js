@@ -10,6 +10,9 @@ const refs = {
 
 let selectedDate = null;
 let isActive = false;
+let intervalId = null;
+
+
 
 // Об'єкт налаштувань для flatpickr
 const options = {
@@ -34,6 +37,7 @@ const options = {
         backOverlayClickToClose: true,
         timeout: 1000,
         fontSize: 20,
+        background:'#a85d5d'
       });
       refs.startBtn.disabled = true;
       return
@@ -61,19 +65,38 @@ function startTimer() {
 // Якщо не запущений то запускаємо
   isActive = true;
   refs.startBtn.disabled = true;
-  setInterval(() => {
+  intervalId = setInterval(() => {
 
 // оприділяємо поточний час на момент виконання інтервалу(кожну секунду буде інший)
     const currentTime = Date.now();
     // console.log(currentTime);
 
 // рахуємо різницю між стартовим часом і поточним (в даному інтервалі)
-    const deltaTime = selectedDate - currentTime;
+    let deltaTime = selectedDate - currentTime;
     // console.log(selectedDate);
     // console.log(deltaTime);
-
+    if (deltaTime < 1000) {
+      console.log('Акція закінчилася');
+      Notify.success('Акція закінчилася', {
+        position: "center-top",
+        // backOverlay: false,
+        clickToClose: true,
+        closeButton: true,
+        useIcon: false,
+        backOverlayClickToClose: true,
+        timeout: 1000,
+        fontSize: 20,
+        background:'#5da85d'
+      });
+      clearInterval(intervalId);
+      // таймер зависає на 1 секунді,
+      // щоб цього уникнути обнулюємо 
+      updateClockFace(convertMs(0));
+      console.log('Встановлено 00:00:00');
+      return
+}
 // Конвертуємо мілісекунди в дні години хвилини секунди
-    const time = convertMs(deltaTime);
+   const time = convertMs(deltaTime);
     console.log(time);
       
 // повертаємо значення на сторінку

@@ -4,11 +4,6 @@ const promiseForm = document.querySelector('.form');
 
 promiseForm.addEventListener('submit', onFormSubmit);
 
-let delayInput = null;
-let delayStep = null;
-let amountInput = null;
-
-
 function onFormSubmit(event) {
   event.preventDefault();
 
@@ -17,9 +12,9 @@ function onFormSubmit(event) {
     delay, step, amount },
   } = event.currentTarget;
 
-  delayInput = Number(delay.value);
-  delayStep = Number(step.value);
-  amountInput = Number(amount.value);
+ let delayInput = Number(delay.value);
+ let delayStep = Number(step.value);
+ let amountInput = Number(amount.value);
 
   
   for (let i = 1; i <= amountInput; i += 1) {
@@ -29,13 +24,16 @@ function onFormSubmit(event) {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`, {
           timeout: 1000,
           cssAnimationStyle: 'fade',
-      });
-    })
+          background:'#5da85d'
+        });
+      })
       .catch(({ position, delay }) => {
-      console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+        console.log(`❌ Rejected promise ${position} in ${delay}ms`);
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`, {
           timeout: 1000,
           cssAnimationStyle: 'fade',
+          background:'#a85d5d'
+
       });
       });
     
